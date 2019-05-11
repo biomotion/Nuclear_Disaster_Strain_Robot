@@ -14,7 +14,7 @@ class JoyMapper(object):
         #self.pub_car_cmd = rospy.Publisher("~car_cmd", Twist2DStamped, queue_size=1)
         
         #Subscribers
-        self.sub_joy = rospy.Subscriber("joy", Joy, self.cbJoy, queue_size=1)
+        self.sub_joy = rospy.Subscriber("/joy", Joy, self.cbJoy, queue_size=1)
 
     def cbJoy(self, msg):
         # Button List index of joy.buttons array:
@@ -30,17 +30,17 @@ class JoyMapper(object):
         # 9: Left joystick
         # 10: Right joystick
         print "joy cb"
-        if (msg.button[0] == 1):
+        if (msg.buttons[0] == 1):
             print "A"
-        elif (msg.button[1] == 1):
+        elif (msg.buttons[1] == 1):
             print "B"
-        elif (msg.button[2] == 1):
+        elif (msg.buttons[2] == 1):
             print "X"
-        elif (msg.button[3] == 1):
+        elif (msg.buttons[3] == 1):
             print "Y"
 
 
 if __name__ == "__main__":
-    rospy.init_node("joy_mapper", annonymous=False)
+    rospy.init_node("joy_mapper", anonymous=False)
     joy_mapper = JoyMapper()
     rospy.spin()
