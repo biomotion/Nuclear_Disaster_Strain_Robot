@@ -7,9 +7,10 @@ from sensor_msgs.msg import Joy
 
 class JoyMapper(object):
     def __init__(self):
+        
         self.node_name = rospy.get_name()
+        self.joy = None
         rospy.loginfo("Initializing [%s]" %self.node_name)
-
         #Publishers
         #self.pub_car_cmd = rospy.Publisher("~car_cmd", Twist2DStamped, queue_size=1)
         
@@ -17,6 +18,29 @@ class JoyMapper(object):
         self.sub_joy = rospy.Subscriber("/joy", Joy, self.cbJoy, queue_size=1)
 
     def cbJoy(self, msg):
+        print "joy cb"
+        self.joy = msg
+        self.processButtons();
+        self.processAxes();
+
+    def processAxes(self):
+        # Axes def in X-mode
+        # 0: left horizontal
+        # 1: left vertical
+        # 2: left T
+        # 3: right horizontal
+        # 4: right vertical
+        # 5: right T
+        # 6: left/right
+        # 7: up/down
+        print "axis[0] = ", self.joy.axes[0]
+        print "axis[1] = ", self.joy.axes[1]
+        print "axis[2] = ", self.joy.axes[2]
+        print "axis[3] = ", self.joy.axes[3]
+        print "axis[4] = ", self.joy.axes[4]
+        print "axis[5] = ", self.joy.axes[5]
+
+    def processButtons(self):
         # Button List index of joy.buttons array:
         # 0: A 
         # 1: B 
@@ -29,14 +53,13 @@ class JoyMapper(object):
         # 8: Logitek 
         # 9: Left joystick
         # 10: Right joystick
-        print "joy cb"
-        if (msg.buttons[0] == 1):
+        if (self.joy.buttons[0] == 1):
             print "A"
-        elif (msg.buttons[1] == 1):
+        elif (self.joy.buttons[1] == 1):
             print "B"
-        elif (msg.buttons[2] == 1):
+        elif (self.joy.buttons[2] == 1):
             print "X"
-        elif (msg.buttons[3] == 1):
+        elif (self.joy.buttons[3] == 1):
             print "Y"
 
 
