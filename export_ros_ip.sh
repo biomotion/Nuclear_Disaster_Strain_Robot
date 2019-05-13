@@ -4,5 +4,6 @@ if [ $# -gt 0 ]; then
 	export ROS_IP=$1
     echo "ROS_IP set to $ROS_IP"
 else
-	echo "Please provide your ip."
+    export ROS_IP=$(hostname -I)
+	echo "ROS_IP set to $ROS_IP"
 fi
