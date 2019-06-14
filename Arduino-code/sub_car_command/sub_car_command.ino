@@ -20,7 +20,7 @@ void set_car_speed(float _v, float _omega);
 //std_msgs::String str_msg;
 
 //Publishers and Subscribers
-ros::Subscriber<duckietown_msgs::Twist2DStamped> sub_car_cmd("car_cmd_cb", car_cmd_cb );
+ros::Subscriber<duckietown_msgs::Twist2DStamped> sub_car_cmd("car_cmd", car_cmd_cb );
 //ros::Publisher chatter("chatter", &str_msg);
 
 float v, omega;
@@ -70,8 +70,8 @@ void car_cmd_cb(const duckietown_msgs::Twist2DStamped& msg){
 
 void set_car_speed(float _v, float _omega){
   int16_t r_speed, l_speed;
-  l_speed = 255*(_v + _omega)/10;
-  r_speed = 255*(_v - _omega)/10;
+  l_speed = 255*(_v - _omega)/10;
+  r_speed = 255*(_v + _omega)/10;
 
   if(l_speed > 0){
     analogWrite(L1, l_speed);
