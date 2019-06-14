@@ -3,7 +3,7 @@ import rospy
 import math
 
 from sensor_msgs.msg import Joy
-#from duckietown_msgs.msg import Twist2DStamped, BoolStamped
+from duckietown_msgs.msg import Twist2DStamped, BoolStamped
 
 class JoyMapper(object):
     def __init__(self):
@@ -11,11 +11,15 @@ class JoyMapper(object):
         self.node_name = rospy.get_name()
         self.joy = None
         rospy.loginfo("Initializing [%s]" %self.node_name)
-        #Publishers
-        #self.pub_car_cmd = rospy.Publisher("~car_cmd", Twist2DStamped, queue_size=1)
-        
+
         #Subscribers
         self.sub_joy = rospy.Subscriber("/joy", Joy, self.cbJoy, queue_size=1)
+        #Publishers
+        self.pub_car_cmd = rospy.Publisher("/car_cmd", Twist2DStamped, queue_size=1)
+        #params
+        self.v_gain = 5
+        self.omega_gain = 5
+
 
     def cbJoy(self, msg):
         print "joy cb"
@@ -39,6 +43,14 @@ class JoyMapper(object):
         print "axis[3] = ", self.joy.axes[3]
         print "axis[4] = ", self.joy.axes[4]
         print "axis[5] = ", self.joy.axes[5]
+        
+        car_cmd_msg = Twist2DStamped()
+        car_cmd_msg.header.stamp = self.joy.header.stamp
+        car_cmd_msg.v = self.joy.axes[1] * self.v_gain
+    
+        
+        car_cmd_msg.omega = self.joy.axes[3] * self.omega_gain
+        self.pub_car_cmd.publish(car_cmd_msg)
 
     def processButtons(self):
         # Button List index of joy.buttons array:
