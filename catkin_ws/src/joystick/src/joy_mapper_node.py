@@ -22,7 +22,7 @@ class JoyMapper(object):
 
 
     def cbJoy(self, msg):
-        print "joy cb"
+        # print "joy cb"
         self.joy = msg
         self.processButtons();
         self.processAxes();
@@ -37,12 +37,12 @@ class JoyMapper(object):
         # 5: right T
         # 6: left/right
         # 7: up/down
-        print "axis[0] = ", self.joy.axes[0]
-        print "axis[1] = ", self.joy.axes[1]
-        print "axis[2] = ", self.joy.axes[2]
-        print "axis[3] = ", self.joy.axes[3]
-        print "axis[4] = ", self.joy.axes[4]
-        print "axis[5] = ", self.joy.axes[5]
+        # print "axis[0] = ", self.joy.axes[0]
+        # print "axis[1] = ", self.joy.axes[1]
+        # print "axis[2] = ", self.joy.axes[2]
+        # print "axis[3] = ", self.joy.axes[3]
+        # print "axis[4] = ", self.joy.axes[4]
+        # print "axis[5] = ", self.joy.axes[5]
         
         car_cmd_msg = Twist2DStamped()
         car_cmd_msg.header.stamp = self.joy.header.stamp
@@ -65,14 +65,15 @@ class JoyMapper(object):
         # 8: Logitek 
         # 9: Left joystick
         # 10: Right joystick
-        if (self.joy.buttons[0] == 1):
-            print "A"
-        elif (self.joy.buttons[1] == 1):
-            print "B"
-        elif (self.joy.buttons[2] == 1):
-            print "X"
-        elif (self.joy.buttons[3] == 1):
-            print "Y"
+        pass
+        # if (self.joy.buttons[0] == 1):
+        #     print "A"
+        # elif (self.joy.buttons[1] == 1):
+        #     print "B"
+        # elif (self.joy.buttons[2] == 1):
+        #     print "X"
+        # elif (self.joy.buttons[3] == 1):
+        #     print "Y"
 
 
 if __name__ == "__main__":
