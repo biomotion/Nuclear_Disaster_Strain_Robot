@@ -20,7 +20,7 @@ void set_car_speed(float _v, float _omega);
 //std_msgs::String str_msg;
 
 //Publishers and Subscribers
-ros::Subscriber<duckietown_msgs::Twist2DStamped> sub_car_cmd("car_cmd", car_cmd_cb );
+ros::Subscriber<duckietown_msgs::Twist2DStamped> sub_car_cmd("/car_cmd", car_cmd_cb );
 //ros::Publisher chatter("chatter", &str_msg);
 
 float v, omega;
@@ -47,7 +47,7 @@ void loop() {
 //  str_msg.data = "spin";
 //  chatter.publish( &str_msg );
   nh.spinOnce();
-  delay(33);
+  delay(1);
 }
 
 void car_cmd_cb(const duckietown_msgs::Twist2DStamped& msg){
