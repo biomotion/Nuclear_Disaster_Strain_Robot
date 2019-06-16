@@ -1,0 +1,12 @@
+<launch>
+    <arg name="pkg_name" value="pozyx"/>
+    <arg name="node_name" default="pozyx_tag_node"/>
+
+    <node name="$(arg node_name)" pkg="$(arg pkg_name)" type="$(arg node_name).py"
+          output="screen">
+    </node>
+
+    <node name="pose_visualizer" pkg="$(arg pkg_name)" type="pose_visualization.py"
+    	  output="screen" />
+
+</launch>
