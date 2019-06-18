@@ -77,7 +77,7 @@ def pozyx_setup():
 def pubPoses():
 
     pub_poses = rospy.Publisher('~pozyx_pose', PoseStamped, queue_size=1)
-    markerPub = rospy.Publisher('robotMarker', Marker, queue_size=1)
+    # markerPub = rospy.Publisher('robotMarker', Marker, queue_size=1)
     rate = rospy.Rate(sample_rate)
 
     # while not rospy.is_shutdown():
