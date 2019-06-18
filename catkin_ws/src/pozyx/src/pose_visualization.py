@@ -24,9 +24,10 @@ class visualizer(object):
         marker_msg.pose.orientation.y = pose_msg.pose.orientation.y
         marker_msg.pose.orientation.z = pose_msg.pose.orientation.z
         marker_msg.pose.orientation.w = pose_msg.pose.orientation.w
-        marker_msg.scale.x = 1
-        marker_msg.scale.y = 0.2
-        marker_msg.scale.z = 0.2
+        marker_msg.scale.x = 0.15
+        marker_msg.scale.y = 0.01
+        marker_msg.scale.z = 0.01
+        
 
         marker_msg.color.r = 1.0
         marker_msg.color.g = 0.0
