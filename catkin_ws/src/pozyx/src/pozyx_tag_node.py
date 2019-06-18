@@ -148,7 +148,7 @@ def pubPoses():
             # start = rospy.Time.now()
             position = Coordinates()
             orientation = EulerAngles()
-            status = pozyx.doPositioning(position, dimension=PozyxConstants.DIMENSION_2D)
+            status = pozyx.doPositioning(position, dimension=PozyxConstants.DIMENSION_3D, algorithm=PozyxConstants.POSITIONING_ALGORITHM_TRACKING)
             status &= pozyx.getEulerAngles_deg(orientation)
             if status == POZYX_SUCCESS: # if get pose from pozyx
                 #print "X:", position.x, ", Y:", position.y, "Z:", position.z
@@ -174,13 +174,13 @@ def pubPoses():
             # print "Detection time: ", end-start
     
         if len(x) != 0:
-            print "End for"
+            # print "End for"
             tag_pose = PoseStamped()
             tag_pose.header.stamp = rospy.Time.now()
             tag_pose.pose.position.x = sum(x)/len(x)
             tag_pose.pose.position.y = sum(y)/len(y)
             tag_pose.pose.position.z = sum(z)/len(z)
-            print tag_pose.pose.position
+            # print tag_pose.pose.position
             tag_pose.pose.orientation.x = sum(ox)/len(ox)
             tag_pose.pose.orientation.y = sum(oy)/len(oy)
             tag_pose.pose.orientation.z = sum(oz)/len(oz)

@@ -15,8 +15,9 @@ import numpy as np
 import yaml
 
 enable_filter = True
-limit_speed_in_cm = 50 #cm/sec
+limit_speed_in_cm = 10 #cm/sec
 limit_speed = limit_speed_in_cm/1e-8 # mm/nsec
+map_size = 200
 
 class odom_uwb(object):
     """docstring for odom_uwb."""
@@ -38,7 +39,7 @@ class odom_uwb(object):
 
     def pose_callback(self, msg):
 
-        print "pose cb"
+        #print "pose cb"
         trans = [msg.pose.position.x, msg.pose.position.y, msg.pose.position.z]
         rot = [msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w]
         pose_matrix = tr.compose_matrix(angles = tr.euler_from_quaternion(rot), translate = trans)
@@ -55,7 +56,7 @@ class odom_uwb(object):
             # calculate limit matrix
             if enable_filter:
                 limit_dist = limit_speed * (msg.header.stamp.to_nsec() - self.previous_time.to_nsec())
-                print (msg.header.stamp.to_nsec() - self.previous_time.to_nsec())
+                # print (msg.header.stamp.to_nsec() - self.previous_time.to_nsec())
                 scale, shear, angles, prev_trans, persp = tr.decompose_matrix(self.previous_tf)
                 moved_vec = [msg.pose.position.x - prev_trans[0], 
                              msg.pose.position.y - prev_trans[1], 
@@ -66,6 +67,9 @@ class odom_uwb(object):
                     print "move too fast:", moved_dist
                     return
         self.map.append(msg)
+        print len(self.map)
+        if len(self.map) > map_size:
+            self.map.pop(0)
         for point in self.map:
             marker_msg = Marker()
             marker_msg.header.frame_id = "map"
@@ -82,9 +86,9 @@ class odom_uwb(object):
             marker_msg.pose.orientation.y = point.pose.orientation.y
             marker_msg.pose.orientation.z = point.pose.orientation.z
             marker_msg.pose.orientation.w = point.pose.orientation.w
-            marker_msg.scale.x = 0.01
-            marker_msg.scale.y = 0.01
-            marker_msg.scale.z = 0.01
+            marker_msg.scale.x = 0.05
+            marker_msg.scale.y = 0.05
+            marker_msg.scale.z = 0.05
         
 
             marker_msg.color.r = 0.0

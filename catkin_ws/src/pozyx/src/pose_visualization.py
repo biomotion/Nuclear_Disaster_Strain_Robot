@@ -8,7 +8,7 @@ class visualizer(object):
         self.pub_marker = rospy.Publisher("~pose_visualizer", Marker, queue_size=1)
         self.sub_pose = rospy.Subscriber("/pozyx_tag_node/pozyx_pose", PoseStamped, self.pose_cb, queue_size=1)
     def pose_cb(self, pose_msg):
-        print "pose cb"
+        #print "pose cb"
         marker_msg = Marker()
         marker_msg.header.frame_id = "map"
         marker_msg.header.stamp = rospy.Time()
@@ -24,9 +24,9 @@ class visualizer(object):
         marker_msg.pose.orientation.y = pose_msg.pose.orientation.y
         marker_msg.pose.orientation.z = pose_msg.pose.orientation.z
         marker_msg.pose.orientation.w = pose_msg.pose.orientation.w
-        marker_msg.scale.x = 0.15
-        marker_msg.scale.y = 0.01
-        marker_msg.scale.z = 0.01
+        marker_msg.scale.x = 0.3
+        marker_msg.scale.y = 0.05
+        marker_msg.scale.z = 0.05
         
 
         marker_msg.color.r = 1.0
