@@ -1,0 +1,8 @@
+<launch>
+	<arg name="pkg_name" value="slam"/>
+	<arg name="node_name" value="draw_trajactory"/>
+
+	<node pkg="$(arg pkg_name)" type="mapping.py" name="$(arg node_name)" output="screen" />
+
+	<include file="$(find pozyx)/launch/pozyx_tag_node.launch"/>
+</launch>
