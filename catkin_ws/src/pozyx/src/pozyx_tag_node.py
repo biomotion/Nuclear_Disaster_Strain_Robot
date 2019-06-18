@@ -54,10 +54,10 @@ def pozyx_setup():
         and the second anchor should be at y=0,
         the third anchor should have a positive y value
     '''
-    anchors = [DeviceCoordinates(0x6e5d, 1, Coordinates(0, 0, 490)),
+    anchors = [DeviceCoordinates(0x6754, 1, Coordinates(0, 0, 490)),
                DeviceCoordinates(0x674f, 1, Coordinates(3000, 0, 490)),
-               DeviceCoordinates(0x6754, 1, Coordinates(0, 3000, 490)),
-               DeviceCoordinates(0x675d, 1, Coordinates(3000, 3000, 490))]
+               DeviceCoordinates(0x6e5d, 1, Coordinates(0, 3000, 490)),
+               DeviceCoordinates(0x6755, 1, Coordinates(3000, 3000, 490))]
 
     status = pozyx.clearDevices()
     for anchor in anchors:
@@ -139,12 +139,17 @@ def pubPoses():
         x = []
         y = []
         z = []
+
+        ox = []
+        oy = []
+        oz = []
+        ow = []
         for i in range(sample_pts):
             # start = rospy.Time.now()
             position = Coordinates()
             orientation = EulerAngles()
             status = pozyx.doPositioning(position, dimension=PozyxConstants.DIMENSION_2D)
-            #status &= pozyx.getEulerAngles_deg(orientation, remote_id=0x6754)
+            status &= pozyx.getEulerAngles_deg(orientation)
             if status == POZYX_SUCCESS: # if get pose from pozyx
                 #print "X:", position.x, ", Y:", position.y, "Z:", position.z
                 #print "Orientation:", str(orientation)
@@ -154,11 +159,11 @@ def pubPoses():
                 y.append(float(position.y))
                 z.append(float(position.z))
                 # http://wiki.ros.org/tf2/Tutorials/Quaternions
-                #tag_pose.pose.orientation.x = 0
-                #tag_pose.pose.orientation.y = 0
-                #tag_pose.pose.orientation.z = 0
-                #tag_pose.pose.orientation.w = 1
-                # rot = quaternion_from_euler(radians(orientation.heading), radians(orientation.roll), radians(orientation.pitch))
+                rot = quaternion_from_euler(radians(orientation.heading), radians(orientation.roll), radians(orientation.pitch))
+                ox.append(rot[0])
+                oy.append(rot[1])
+                oz.append(rot[2])
+                ow.append(rot[3])
                 # tag_pose.pose.orientation.x = rot[0]
                 # tag_pose.pose.orientation.y = rot[1]
                 # tag_pose.pose.orientation.z = rot[2]
@@ -176,10 +181,10 @@ def pubPoses():
             tag_pose.pose.position.y = sum(y)/len(y)
             tag_pose.pose.position.z = sum(z)/len(z)
             print tag_pose.pose.position
-            tag_pose.pose.orientation.x = 0
-            tag_pose.pose.orientation.y = 0
-            tag_pose.pose.orientation.z = 0
-            tag_pose.pose.orientation.w = 1
+            tag_pose.pose.orientation.x = sum(ox)/len(ox)
+            tag_pose.pose.orientation.y = sum(oy)/len(oy)
+            tag_pose.pose.orientation.z = sum(oz)/len(oz)
+            tag_pose.pose.orientation.w = sum(ow)/len(ow)
             pub_poses.publish(tag_pose)
 
         rate.sleep()
