@@ -33,13 +33,13 @@ class position(object):
         self.cx = 0
         self.cy = 0
         self.cv_bridge = CvBridge() 
-        self.depth_image = 0
+        self.depth_image = None
 
         xy_position = rospy.Subscriber("/position", Point32, self.getbb_cb )
         cam_info_sb = rospy.Subscriber("/camera/color/camera_info", CameraInfo , self.caminfo_cb )
         depth_image_sb = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image , self.depth_img_cb )
 
-        xyz_position = rospy.Publisher("/xyz_position", Point32, queue_size = 1)
+        self.xyz_position = rospy.Publisher("/xyz_position", Point32, queue_size = 1)
 
     
     def caminfo_cb(self,info_msg):
@@ -56,7 +56,9 @@ class position(object):
         inv_fx = 1.0/self.fx
         inv_fy = 1.0/self.fy
 
-        z = self.depth_image[x, y]
+        z = self.depth_image[y, x]
+        
+        print('img_x:{}, img_y:{} z_val:{}'.format(x, y, z))
 
         real_x = (x - self.cx) * z * inv_fx
         real_y = (y - self.cy) * z * inv_fy
@@ -76,7 +78,7 @@ class position(object):
         #         cv_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
         #     else:
         #         cv_image = self.cv_bridge.imgmsg_to_cv2(img_msg, "bgr8")
-        cv_image = self.cv_bridge.imgmsg_to_cv2(img_msg, "bgr8")
+        cv_image = self.cv_bridge.imgmsg_to_cv2(img_msg, desired_encoding="passthrough")
         # except CvBridgeError as e:
         #     print(e)
         
@@ -93,12 +95,14 @@ class position(object):
         if self.fx == 0:
             print('camera info is not ready!')
             return
-        if self.depth_image == 0:
+        if type(self.depth_image) == 'NoneType':
             print('depth image is not ready!')
             return
+        
+        # print('img_x:{}, img_y:{}'.format(msg.x, msg.y))
 
-        img_x = msg.x
-        img_y = msg.y
+        img_x = int(msg.x)
+        img_y = int(msg.y)
         self.depth_to_point(img_x, img_y)
         
 
