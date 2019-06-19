@@ -30,7 +30,7 @@ def pozyx_setup():
 
 
     pozyx.clearDevices()
-    status = pozyx.doDiscovery(discovery_type=PozyxConstants.DISCOVERY_ALL_DEVICES, slots=4)
+    # status = pozyx.doDiscovery(discovery_type=PozyxConstants.DISCOVERY_ALL_DEVICES, slots=4)
 
     # list_size = SingleRegister()
     # pozyx.getNumberOfAnchors(list_size)
@@ -54,7 +54,7 @@ def pozyx_setup():
         and the second anchor should be at y=0,
         the third anchor should have a positive y value
     '''
-    anchors = [DeviceCoordinates(0x6754, 1, Coordinates(0, 0, 490)),
+    anchors = [DeviceCoordinates(0x6742, 1, Coordinates(0, 0, 490)),
                DeviceCoordinates(0x674f, 1, Coordinates(3000, 0, 490)),
                DeviceCoordinates(0x6e5d, 1, Coordinates(0, 3000, 490)),
                DeviceCoordinates(0x6755, 1, Coordinates(3000, 3000, 490))]
@@ -159,7 +159,7 @@ def pubPoses():
                 y.append(float(position.y))
                 z.append(float(position.z))
                 # http://wiki.ros.org/tf2/Tutorials/Quaternions
-                rot = quaternion_from_euler(radians(orientation.heading), radians(orientation.roll), radians(orientation.pitch))
+                rot = quaternion_from_euler(-radians(orientation.pitch), radians(orientation.roll), -radians(orientation.heading))
                 ox.append(rot[0])
                 oy.append(rot[1])
                 oz.append(rot[2])
