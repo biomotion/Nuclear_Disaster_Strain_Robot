@@ -3,6 +3,11 @@
 	<arg name="veh" default="jetson-car" doc="Name of vehicle. ex: megaman"/>
 	<arg name="config" default="baseline" doc="Specify a config."/>
 
-	<include file="$(find pozyx)/launch/pozyx_tag_node.launch"/>
 	<include file="$(find joystick)/launch/joystick.launch" />
+	<include file="$(find realsense2_camera)/launch/rs_aligned_depth.launch" />
+	<include file="$(find ssd_mobile_lite)/launch/ssd_prediction.launch" />
+	<include file="$(find slam)/launch/draw_trajactory.launch" />
+
+	<node name="position_node" pkg="position" type="position.py" />
+	<node name="tf_obj_node" pkg="position" type="tf_obj.py" />
 </launch>
