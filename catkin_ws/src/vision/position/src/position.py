@@ -77,8 +77,8 @@ class position(object):
         #     else:
         #         cv_image = self.cv_bridge.imgmsg_to_cv2(img_msg, "bgr8")
         cv_image = self.cv_bridge.imgmsg_to_cv2(img_msg, "bgr8")
-        except CvBridgeError as e:
-            print(e)
+        # except CvBridgeError as e:
+        #     print(e)
         
         self.depth_image = cv_image
         # (rows, cols, channels) = cv_image.shape
