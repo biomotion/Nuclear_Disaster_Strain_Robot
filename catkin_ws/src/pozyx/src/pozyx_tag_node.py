@@ -12,8 +12,8 @@ from visualization_msgs.msg import Marker
 
 import csv
 
-sample_pts = 1
-sample_rate = 10 #hz
+sample_pts = 3
+sample_rate = 5 #hz
 
 serial_port = get_first_pozyx_serial_port()
 print(serial_port)
