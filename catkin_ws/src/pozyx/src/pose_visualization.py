@@ -32,7 +32,7 @@ class visualizer(object):
         marker_msg.color.r = 1.0
         marker_msg.color.g = 0.0
         marker_msg.color.b = 1.0
-        marker_msg.color.a = 1.0
+        marker_msg.color.a = 0.6
 
         marker_msg.lifetime = rospy.Duration()
         self.pub_marker.publish(marker_msg)
