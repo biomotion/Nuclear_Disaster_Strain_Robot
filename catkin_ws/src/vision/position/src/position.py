@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import numpy as np
 import cv2
 import roslib
@@ -22,6 +24,7 @@ import os
 import message_filters
 #from ssd_mobile_lite.msg import Position
 
+print('hi')
 
 class position(object):
     def __init__(self):
@@ -33,7 +36,7 @@ class position(object):
         self.depth_image = 0
 
         xy_position = rospy.Subscriber("/position", Point32, self.getbb_cb )
-        CameraInfo = rospy.Subscriber("/camera/color/camera_info", CameraInfo , self.caminfo_cb )
+        cam_info_sb = rospy.Subscriber("/camera/color/camera_info", CameraInfo , self.caminfo_cb )
         Extrinsics = rospy.Subscriber("/camera/extrinsics/depth_to_color", Image , self.depth_img_cb )
 
         xyz_position = rospy.Publisher("/xyz_position", Point32, queue_size = 1)
