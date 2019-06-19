@@ -24,7 +24,7 @@ import os
 import message_filters
 #from ssd_mobile_lite.msg import Position
 
-print('hi')
+#print('hi')
 
 class position(object):
     def __init__(self):
@@ -58,20 +58,23 @@ class position(object):
         inv_fx = 1.0/self.fx
         inv_fy = 1.0/self.fy
 
-        z = self.depth_image[y, x]
+        real_z = self.depth_image[y, x]
         
-        print('img_x:{}, img_y:{} z_val:{}'.format(x, y, z))
+        bound_z = self.depth_image[y, 639]
+        bound_x = (639 - self.cx) * bound_z * inv_fx
+        
+        # print('img_x:{}, img_y:{} z_val:{}'.format(x, y, real_z))
 
-        real_x = (x - self.cx) * z * inv_fx
-        real_y = (y - self.cy) * z * inv_fy
+        real_x = (x - self.cx) * real_z * inv_fx
+        real_y = (y - self.cy) * real_z * inv_fy
         
         xyz_position_msg = Point32()
-        xyz_position_msg.x = x
-        xyz_position_msg.y = y
-        xyz_position_msg.z = z
+        xyz_position_msg.x = real_x
+        xyz_position_msg.y = real_y
+        xyz_position_msg.z = real_z
         self.xyz_position.publish(xyz_position_msg)
 
-        return [x, y, z]
+        return [real_x, real_y, real_z]
     
     def depth_img_cb(self, img_msg):
         # try:
@@ -108,12 +111,14 @@ class position(object):
         
         pose_msg = PointStamped()
         real_x, real_y, real_z = self.depth_to_point(img_x, img_y)
-        pose_msg.point.x = float(real_x)/1000
-        pose_msg.point.y = float(real_y)/1000
-        pose_msg.point.z = float(real_z)/1000
+        pose_msg.point.x = float(real_z)/1000
+        pose_msg.point.y = float(-real_x)/1000
+        pose_msg.point.z = 0 #float(real_y)/1000
         pose_msg.header.frame_id = '/camera_link'
         pose_msg.header.seq = self.ans_cnt
         self.ans_cnt = self.ans_cnt + 1
+
+        #print('x:{}, y:{} z:{}'.format(pose_msg.point.x, pose_msg.point.y, pose_msg.point.z))
         
         pose_msg.header.stamp = rospy.Time.now()
         self.p_stamp_pb.publish(pose_msg)

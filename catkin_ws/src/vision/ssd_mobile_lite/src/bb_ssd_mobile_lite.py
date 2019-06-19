@@ -117,8 +117,8 @@ class bb_ssd_mobile_lite(object):
                     x = (box[0] + box[2])/2
                     y = (box[1] + box[3])/2
                     position_msg = Point32()
-                    position_msg.x = x
-                    position_msg.y = y
+                    position_msg.x = int(x)
+                    position_msg.y = int(y)
                     self.position.publish(position_msg)
 
         return img# , objs
