@@ -68,8 +68,8 @@ class odom_uwb(object):
                     return
         self.map.append(msg)
         print len(self.map)
-        if len(self.map) > map_size:
-            self.map.pop(0)
+        # if len(self.map) > map_size:
+        #     self.map.pop(0)
         for point in self.map:
             marker_msg = Marker()
             marker_msg.header.frame_id = "map"
