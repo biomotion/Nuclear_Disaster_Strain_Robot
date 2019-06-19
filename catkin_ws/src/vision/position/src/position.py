@@ -37,7 +37,7 @@ class position(object):
 
         xy_position = rospy.Subscriber("/position", Point32, self.getbb_cb )
         cam_info_sb = rospy.Subscriber("/camera/color/camera_info", CameraInfo , self.caminfo_cb )
-        Extrinsics = rospy.Subscriber("/camera/extrinsics/depth_to_color", Image , self.depth_img_cb )
+        depth_image_sb = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image , self.depth_img_cb )
 
         xyz_position = rospy.Publisher("/xyz_position", Point32, queue_size = 1)
 
