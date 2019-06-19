@@ -10,7 +10,7 @@ import math
 import time
 from sensor_msgs.msg import Image
 from sensor_msgs.msg import CameraInfo, CompressedImage
-from geometry_msgs.msg import PoseArray, PoseStamped, Point32
+from geometry_msgs.msg import PoseArray, PoseStamped, Point32, PointStamped
 from visualization_msgs.msg import Marker, MarkerArray
 import rospkg
 from nav_msgs.msg import Path
@@ -34,13 +34,15 @@ class position(object):
         self.cy = 0
         self.cv_bridge = CvBridge() 
         self.depth_image = None
+        self.ans_cnt = 0
 
         xy_position = rospy.Subscriber("/position", Point32, self.getbb_cb )
         cam_info_sb = rospy.Subscriber("/camera/color/camera_info", CameraInfo , self.caminfo_cb )
         depth_image_sb = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image , self.depth_img_cb )
 
         self.xyz_position = rospy.Publisher("/xyz_position", Point32, queue_size = 1)
-
+        
+        self.p_stamp_pb = rospy.Publisher("/obj_point", PointStamped, queue_size = 1)
     
     def caminfo_cb(self,info_msg):
 
@@ -103,7 +105,19 @@ class position(object):
 
         img_x = int(msg.x)
         img_y = int(msg.y)
-        self.depth_to_point(img_x, img_y)
+        
+        pose_msg = PointStamped()
+        real_x, real_y, real_z = self.depth_to_point(img_x, img_y)
+        pose_msg.point.x = float(real_x)/1000
+        pose_msg.point.y = float(real_y)/1000
+        pose_msg.point.z = float(real_z)/1000
+        pose_msg.header.frame_id = '/camera_link'
+        pose_msg.header.seq = self.ans_cnt
+        self.ans_cnt = self.ans_cnt + 1
+        
+        pose_msg.header.stamp = rospy.Time.now()
+        self.p_stamp_pb.publish(pose_msg)
+         
         
 
 
