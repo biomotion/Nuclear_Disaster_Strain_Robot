@@ -9,7 +9,7 @@ void setup() {
   pinMode(L_MOTOR_INT, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(L_MOTOR_INT), left_int, RISING);
   attachInterrupt(digitalPinToInterrupt(R_MOTOR_INT), right_int, RISING);
-  Serial.begin(115200);
+  Serial.begin(57600);
   Serial.println("Start");
 }
 

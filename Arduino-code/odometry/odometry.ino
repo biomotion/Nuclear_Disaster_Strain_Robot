@@ -3,11 +3,11 @@
  * reckoning, for usage of differential-drive mobile robot.
  * Developed by Sean Lu at Nov., 2018. 
  */
-#define SPD_INT_L2 8
-#define SPD_INT_R2 9
-#define RADIUS 0.032 // Wheel radius, in meter
-#define CPR 2970.0   // Encoder Counts Per Revolution
-#define WIDTH 0.179 // Two wheel distance, in meter
+#define SPD_INT_L2 7
+#define SPD_INT_R2 8
+#define L_MOTOR_INT 2 
+#define R_MOTOR_INT 3
+
 
 volatile long encoder_pre_L, encoder_pre_R; // present
 volatile long encoder_pos_L, encoder_pos_R; // post
@@ -24,9 +24,9 @@ void setup()
   Serial.begin(57600);
   // Regist interrupt callback functions
   // UNO pin 2, call Encoder_L when the signal is rising
-  attachInterrupt(0, Encoder_L, RISING);
+  attachInterrupt(digitalPinToInterrupt(L_MOTOR_INT), Encoder_L, RISING);
   // UNO pin 3, call Encoder_R when the signal is rising
-  attachInterrupt(1, Encoder_R, RISING);
+  attachInterrupt(digitalPinToInterrupt(R_MOTOR_INT), Encoder_R, RISING);
   time_ = millis();
 }
 
