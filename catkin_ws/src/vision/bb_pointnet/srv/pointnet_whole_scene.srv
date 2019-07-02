@@ -1,5 +1,0 @@
-#Request data
-#sensor_msgs/PointCloud2 input_pc
----
-#Response data
-string info # for mission result

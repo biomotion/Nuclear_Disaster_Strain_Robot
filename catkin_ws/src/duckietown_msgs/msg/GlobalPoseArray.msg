@@ -1,1 +1,0 @@
-GlobalPose[] poses
