@@ -1,0 +1,166 @@
+% \documentclass[conference,10pt]{ieeeconf}
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+\usepackage{pstricks}
+\usepackage{ifplatform}
+\usepackage{xkeyval}
+\usepackage{rotating}
+\newtheorem{remark}{Remark}
+\usepackage{graphics} % for pdf, bitmapped graphics files
+% TEST-DEL: \usepackage[off]{auto-pst-pdf}
+% \usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{psfrag}
+\usepackage{cancel}
+\def\etal{\mbox{et al.}}
+% \usepackage{pifont}
+% \usepackage{flushend}
+\usepackage[normalem]{ulem}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{color}
+\input rgb
+\def\blue#1{\textcolor{blue}{#1}}
+\def\red#1{\textcolor{red}{#1}}
+\def\orange#1{\textcolor{orange}{#1}}
+\def\green#1{\textcolor{darkgreen}{#1}}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+%\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage{subcaption}
+% \usepackage{mathptmx}
+%\usepackage{enumitem}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\smark}{$\bigstar$}%
+\usepackage{booktabs}
+%\input lamacro
+\usepackage{lipsum}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\input{macros.tex}
+\let\clipbox\relax
+\usepackage{adjustbox}
+%\usepackage{array}
+\usepackage{booktabs}
+
+\usepackage{CJKutf8}
+
+\newcolumntype{R}[2]{%
+    >{\adjustbox{angle=#1,lap=\width-(#2)}\bgroup}%
+    l%
+    <{\egroup}%
+}
+\newcommand*\rot{\multicolumn{1}{R{70}{1em}}}
+
+\graphicspath{{figures/},{figures/new_diagrams/}}
+\newcommand{\svgpath}{./images}
+
+\usepackage{hyperref}
+%\let\oldsection\section
+%\renewcommand{\section}{\clearpage\oldsection}
+
+%\allowdisplaybreaks[2]
+\renewcommand{\baselinestretch}{0.97}
+\textfloatsep = 6pt
+
+% \let\subparagraph\relax
+% \usepackage{titlesec}
+% \usepackage[compact]{titlesec}
+% \titlespacing{\section}{0pt}{2ex}{1ex}
+% \titlespacing{\subsection}{0pt}{1ex}{0ex}
+% \titlespacing{\subsubsection}{0pt}{0.5ex}{0ex}
+
+\usepackage{mdwlist}
+\let\stditemize\itemize
+\let\endstditemize\enditemize
+\let\itemize\undefined
+\makecompactlist{itemize}{stditemize}
+
+\let\stdenumerate\enumerate
+\let\endstdenumerate\endenumerate
+\let\enumerate\undefined
+\makecompactlist{enumerate}{stdenumerate}
+
+\setlength{\abovecaptionskip}{1pt}
+\setlength{\belowcaptionskip}{1pt}
+
+\usepackage[tracking=false,kerning=true,spacing=true]{microtype}
+\pdfprotrudechars=2
+\pdfadjustspacing=2
+
+\title{\LARGE \bf
+地面無人載具控制與立體視覺整合系統 \\
+Developing Deployable Software and Hardware Systems of Unmanned Vehicles for Autonomous Navigation}
+
+\author{王學誠$^{1}$、黃亦為$^{1}$、林倪敬$^{1}$、蕭宇杰$^{1}$、陳品維$^{1}$、呂紹篁$^{1}$、莊子寬$^{1}$\\
+Hsueh-Cheng Wang$^{1, *}$, Yi-Wei Huang$^{1}$, Ni-Ching Lin$^{1}$,\\
+Yu-Chieh Hsiao$^{1}$, Pin-Wei Chen$^{1}$, 
+Shao-Huang Lu$^{2}$, and Tzu-Kuan Chuang$^{1}$
+% <-this
+% % stops a space
+%\thanks{*This work was supported by Ministry of Science and Technology (MOST),
+% Taiwan}% <-this % stops a space
+\thanks{$^{1}$國立交通大學電控工程研究所 Institute of Electrical and Control Engineering, National Chiao Tung University, Taiwan. $^{2}$國立交通大學機器人碩士學位學程 Graduate Program of Robotics, National Chiao Tung University, Taiwan. Corresponding author email:
+        {\tt\small hchengwang@g2.nctu.edu.tw}}%
+}
+
+\begin{document}
+%\begin{CJK}{UTF8}{bsmi}
+\begin{CJK}{UTF8}{bkai}
+
+\maketitle
+
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{00_abstract.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{01_introduction.tex}
+
+\input{02_design-strategy.tex}
+
+\input{04_system-architecture.tex}
+
+\input{05_experiments.tex}
+
+\input{06_conclusions.tex}
+
+%\addtolength{\textheight}{-12cm} % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section*{APPENDIX}
+
+%Appendixes should appear before the acknowledgment.
+
+\section*{ACKNOWLEDGMENT}
+
+本研究感謝交大校長、副校長、機器人碩士學位學程、ICT工作坊、青年講座教授增能計畫、研發處學生出國競賽補助。台中中科管理局、工研院國際交流與國際競賽選手培訓計畫。
+Dr. Michael Benjamin, Prof. Henrik Schmidt (MIT)支持學生移地訓練。
+科技部國防科技計畫與中科院呂旺全先生於RobotX培訓課程機器人視覺演說，以及設備支持，最後感謝全體Team NCTU師生對本計畫的貢獻。
+
+%This work was partially
+%supported by the National Science Foundation under grants IIS-1318392 and
+%IIS-1405259.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{IEEEtran}
+\bibliography{arg-egbib}
+
+\end{CJK}
+\end{document}
