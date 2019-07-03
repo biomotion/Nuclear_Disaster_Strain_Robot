@@ -1,5 +1,5 @@
 LATEX_CMD = pdflatex
-DEFAULT_PAPER = csist2018-robotx-report 
+DEFAULT_PAPER = hcc2019-ndsr-report 
 FIGPATH = images
 
 all:	all-$(DEFAULT_PAPER)
