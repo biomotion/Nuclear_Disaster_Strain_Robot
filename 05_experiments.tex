@@ -1,61 +1,71 @@
 \section{實驗與實體驗證}
 
-\subsection{機器人定位與避障任務}
+\subsection{機器人定位}
 
-本研究先以微小化平台測試所建置的感測塔、系統與演算法，將於期末報告對大型無人載具（地面與水面）平台進行測試。
+此專題以室內高精準度定位為目標，配合深度相機之影像辨識與物體深度，找到目標物之位置並標記。
 
 \paragraph{定位準確度測試}
 
-本計畫先針對機器人定位的準確度逕行測試，測試方法比較 1) GPS與IMU進行感測融合，2) 只有GPU資料，實驗地點為交大圖書館前方空地，以一個邊長約100公尺的矩形路線，實驗人員攜帶所建置的感測塔跟著矩形路線行走，並將資料錄製於ROS Bag檔案，實驗結果如圖
-\ref{table:loop_closure_error}所示。結果顯示，從出發點經過指定路線後，回到原始點的誤差值在兩組硬體設定相差不大，但於GPU+IMU設定標準差的值較小，表示在定位過程較穩定。
+本專題之定位裝置使用Ultra-wideband超寬頻通訊天線，為提供目標物位置之量測精準度，設計此定位精準度測試。鋪設5*5巧拼，量測各點之UWB定位座標，比較Ground Truth，進行多次量測後計算方均根值作為誤差數據，實驗結果如表
+\ref{table:localization_error}所示。將結果之數據量化後標示於地圖上如圖\ref{figure:localization_result}所示。
 
 \begin{table}[h]
 	\centering
 	\begin{tabular}{| c| c| c|}
 		\hline
-		Sensor Set & 定位誤差  x, y (m) & 路線標準差 x, y (m) \\ \hline
-		GPS + IMU & 0.65, 0.83 & 0.37, 0.42 \\ \hline
-		GPS only  & 0.60, 0.83 & 0.41, 0.72 \\ \hline 
+		Ground Truth X (m) & Ground Truth Y (mm) & 定位誤差 (mm) \\ 
+		\hline
+		300 & 300 & 68.43 \\ 
+		\hline
+		1500  & 300 & 117.58 \\ 
+		\hline 
+		2700  & 300 & 64.69 \\ 
+		\hline 
+		2700  & 1500 & 195.94 \\ 
+		\hline 
+		2700  & 2700 & 220.11 \\ 
+		\hline 
+		1500  & 2700 & 200.33 \\ 
+		\hline 
+		300  & 2700 & 56.93 \\ 
+		\hline 
+		300  & 1500 & 27.56 \\ 
+		\hline 
+		1500  & 1500 & 50.39 \\ 
+		\hline 
 	\end{tabular}
 	\caption{定位測試}
-	\label{table:loop_closure_error}
+	\label{table:localization_error}
 \end{table} 
 
-\paragraph{避障測試於簡化實驗環境} 
+\begin{figure}[bht]
+	\centering
+	\includegraphics[height=!,width=\linewidth,keepaspectratio=true]
+	{images/uwb_bench.png}
+	\caption{以UWB定位之誤差量測實驗結果}
+	\label{figure:localization_result}
+\end{figure}
 
-本計畫先使用微小化平台，先於室內與室外較為平坦之場域測試，測試內容（請參考圖~ \ref{figure:exp-results}）與影片連結如下：
+\paragraph{定位測試影片} 
+
+本專題利用UWB之定位結果經過移動限制過濾器後繪製出行進軌跡，測試影片連結如下：
 
 \begin{itemize}
 
 \item
-巡邏點進行純追蹤演算法(Pure Pursuit Algorithm): 
-\url{https://youtu.be/DdaZkm7_bjI}
+載具利用遙控行進場地一圈並繪製出軌跡圖
+\url{<Put URL Here>}
 
 \item
 避障實驗一（靜態障礙物）： 
 \url{https://youtu.be/ve4Mln4D1xo}
 
-\item
-避障實驗二（動態障礙物）：
-\url{https://youtu.be/E1anLPuXjxs}
-
-\item
-無人水上載具於虛擬環境避障任務： 
-\url{https://youtu.be/DBuMrUvr7iY}
-
 \end{itemize}
 
-\begin{figure}[h] % h means put this image here
-\includegraphics[width=\columnwidth]{images/exp-results.png}
-\centering
-\caption{微小化平台與簡化場域測試}
- \label{figure:exp-results}
-\end{figure}
 
+\subsection{影像辨識}
 
-\subsection{地面無人載具（進行中）}
-
-本計畫預計將所開發之演算法用於大型地面無人載具（Clearpath Husky，請參考圖~\ref{figure:ground-vehicle}），結合所開發的點雲及開發演算法於地形模擬建構，於不平坦之崎嶇地形進行測試。
+...
 
 \begin{figure}[h] % h means put this image here
 \includegraphics[width=\columnwidth]{images/ground-vehicle.png}
