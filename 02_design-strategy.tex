@@ -1,41 +1,30 @@
-\section{無人載具設計}
+\section{核災應變機器人設計}
 
-\subsection{軟硬體系統整合}
+\subsection{Vision}
+在核災中，我們必須辨識出該城市內之物品，找出可能的目標物品以及生還者。
+由於此次人本專題我們使用了Duckietown城市模擬核災發生並作為驗證場地，所以重新組裝了一台Super Duckiebot。
+在視覺部份因考量到車體大小，故選擇使用體積較小的Jetson Nano處理相關視覺運算，同時也使用運算量較小的MobileNet-SSD Model，
+在影像辨識部份利用RGB資訊進行Training，精準度、輕巧度及靈敏度是Artifact search相當重要的指標，控制訓練後Model的大小將其放置於較輕巧的Jetson Nano上運行，並且考量到幀數（FPS）也就是一秒讀取幾張圖片進行辨識，各個環節環環相扣。
 
-系統整合部分，以機器人作業系統(Robotic Operating System, ROS)~\cite{quigley2009ros} 為主、MOOS-IvP (Mission Oriented Operating Suit Interval Programming)~\cite{benjamin2009overview}為輔。ROS使用C++或Python做為開發語言，其中每個執行程序稱作節點(Node)，每個節點可以通過發送(Publish)和訂閱(Subscribe)來交換訊息(Topic)，而節點管理器(ROS Master)將分控制所有節點，透過節點管理器所有節點才能夠找到其他節點進行訊息交換。ROS是目前最受歡迎的機器人中介軟體，像是PR2、 Atlas、 UR5、 Turtlebot、 Pepper等機器人皆能使用此開源軟體控制，此平台透過ROS-Industrial Consortium 成功預測全球自動化工業以及軍事機器人上機器人軟體模組以及框架的需求~\cite{edwards2012ros}，因此在此開發平台使用者能有效使用開放資源，像是常見的導航、避障、三維重建都有許多開發者提供相關資源，再者ROS也支援許多感測器像是相機、三維感測器、GPS、壓力感測器等。例如，圖~\ref{figure:localization_sys_architecture} 本論文為使用GPS、IMU (Inertia Measurement Unit)所進行的ROS定位系統，包括EKF模組使用卡爾曼濾波 (Kalman Filter)。
+當變試出目標物後，隨即使用Depth資訊利用投影矩陣取得目標物與相機之距離，並與UWB Localization結合，最後呈現於Rviz上觀看。
 
-ROS也越來越受到國防科技應用的重視，而發展出ROS Military (ROS-M)~\cite{towlerros}，探討無人載具軟體開發中的重要議題：網路安全性(Cybersecurity)、系統開發架構(Infrastructure，包含程式庫管理維護、測試與文件、軟體成熟度等)、基底軟體(Seed Software)。
 
-MOOS-IvP與ROS同樣是中介軟體(Middleware)，基於2001年由牛津大學所開發的Mission Oriented Operating Suit (MOOS)，並持續由麻省理工學院團隊於2004年基於所開發的自動海事載具的開源平台，使用C++做完開發語言，MOOS-Ivp具有公開訂閱的訊息規範(publish–subscribe architecture)，用以無人海上船隻與水下無人載具系統，以行為模式為架構達成多目標最佳化的功能，主導路徑規劃的演算法。概念透過一個社群(MOOS Community)，包含一個應用程序溝通橋梁(MOOSDB)、及一個以上的應用程序(MOOSApp)組成，每個社群內部可以自由交換訊息，但是不同的社群須透過特定應用程序才能交換訊息，由此參數間一定程度的相互獨立，能更有效的減少外部部必要的資料傳出，提供更精簡的傳輸模式。MOOS-IvP 包含超過120,000 C++行數、 30個以上不同的應用程式、 數十個載具行為，同時在水上水下真實以及模擬環境測試上百小時，並可直接用官方網站上下載使用，在海洋與水下機器人研究具有廣大的使用者以及影響力~\cite{moosivp2017ntu}。 
 
-\subsection{感測器與計算單元}
+\subsection{Localization}
 
-本論文設計的感測器與計算單元安裝於感測塔(Sensor Tower)上，如圖~\ref{figure:sensor-tower}所示，可予以地面或水面無人載具使用，感測器包含：光達 (LiDAR)、全球定會系統 (GPS)、慣性測量裝置 (IMU)、攝影機、深度攝影機。本論文所使用到的光達基本的原件是不易受環境光線影響了近紅外線、Velodyne HDL-32E 提供了 360度視角，可在條件惡劣環境下，仍可透過雷射光束建構出立體影像，協助判斷自身所在位置、及檢測週遭障礙物，並且建立三維空間影像。再者透過全球定位系統、及慣性測量裝置，可高精準度的空間定位，藉由全球定為系統取得初始定位 後，經由慣性測量裝置持續進行整合計算，快速更新單前位置，最後，可透過深度攝影機了解環境色彩與近距離精確距離，相對於一般相機，該感測器可以透過距離資訊， 獲取攝影機與前方物體之間更多的資訊，有利於分割、辨識物體。
 
-\begin{table}[bht]
-\vspace{0.2cm}
-\caption[計算單元列表]{計算單元處理器規格及使用數量}
-	\centering
-	\begin{tabular} {|l|c|c|c|}
-		\hline
-		計算單元 				& 數量 		& 處理器 	& 規格 \\
-		\hline
-		ASUS Laptop (GX501) 			& 1 		& GPU 		& GeForce GTX 1080 \\
-		\hline
-		NVidia Jeson TX2 				& 3 		& GPU 		& Pascal 256 CUDA cores \\
-		\hline
-		Raspberry Pi 3 (Ne-		& 9			& VPU 		& Movidius Myriad 2 Vi-\\
-		ural Compute Stick)		&			&			& sion Processing Unit \\
-		\hline
-	\end{tabular}
-	\label{table:computation_units}
-\end{table}
-
-\begin{figure}[tb]
+\begin{figure}[t]
   \centering
-    \includegraphics[width=\columnwidth]{images/sensor-data.png}
-        \caption{本研究所設計之感測塔，可用於地面或水面無人載具使用，包含光達 (LiDAR)、全球定位系統 (GPS)、慣性測量裝置 (IMU)、深度攝影機等。}
- \label{figure:sensor-tower}
+    \includegraphics[width=\columnwidth]{images/car.png}
+        \caption{車體設計及相關環境}
+ \label{figure:car}
 \end{figure}
+
+
+
+
+
+
+
 
 
