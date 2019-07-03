@@ -1,32 +1,30 @@
 \section{系統設計}
 
-\subsection{虛擬環境Gazebo}
+\subsection{機器人硬體設計}
+機器人的車體部分，我們沿用MIT Duckietown之車架壓克力板，但是為了更好的載重量我們將馬達改成具有編碼器之馬達，除了增加穩定性與馬力以外，未來也可加入Wheel Odometry之功能提供更完整的SLAM。主控板部分我們使用Nvidia發行之Jetson Nano，具有強大的圖形運算能力，能為深度學習的Model提供更可靠的運算處理。為了能夠定位以及辨識物體，我們在車上加上Pozyx公司推出的UWB裝置，以及Intel RealSense的D435深度相機。前者能夠提供3D Pose定位後者能夠提供RGBD之深度影像有利於視覺辨識與計算物體相對位置。
 
-模擬環境已經廣泛的使用於機器人之實驗測試，相較於使用實體機器人，模擬不只成本低能夠避免硬體受損，還能夠架設特殊場景，另外，可以測試多種不同假設情況，像是不同空氣阻力、水流方向、及機器人控制。Gazebo模擬平台可以提供複雜的環境建置並且準確有效的模擬訓練機器人，他擁有一個強大的物理引擎、先進的三維渲染、支援多種感測器、與ROS有極高的相容性，DARPA舉辦的競賽從早期的DARPA Urban Challenge ~\cite{ozguner2008simulation}、DARPA Robotics Challenge (DRC)、DARPA SubT Challenge，Gazebo均扮演重要角色，其他競賽如：NASA Sapce Robotics Challenge (SRC)、Robocup ~\cite{laue2005simrobot}、及Virtual Maritime RobotX Challenge (VMRC)~\cite{vmrc}也使用Gazebo環境。VMRC是與RobotX Maritime Challenge同樣團隊所開發的模擬競賽，透過VMRC平台所積極開發的模擬環境，不只提供開源程式碼定義基礎環境參數及USV建模及設定。本研究使用過去競賽(SRC, VMRC)所開放之環境為起點，加入相對應之機器人模型、感測器模型等，並對環境內障礙物等做進一步設計，供演算法開發使用。
-
-\begin{figure}[h] % h means put this image here
-\includegraphics[width=0.8\columnwidth]{images/gazebo.png}
-\centering
-\caption{Gazebo虛擬環境開發}
- \label{figure:gazebo}
-\end{figure}
-
-\subsection{分析點雲及開發演算法於地形模擬建構}
-
-本論文的主要工作為融合時間區間的點雲資料來建置緊密地圖(Dense Mapping)，可克服單一時間點點雲可能破碎、資料不足的缺點，相關方法已在文獻回顧介紹，本研究主要以Spatial Mapping~\cite{zed-spatial-mapping}方式進行測試，測試環境為交大竹湖旁之步道，周圍有樹叢斜坡、草地等非平坦地形，結果以三角網格(Triangular Mesh)呈現於圖~\ref{figure:dense-mapping}。
 
 \begin{figure}[h] % h means put this image here
-\includegraphics[width=\columnwidth]{images/dense-mapping.png}
-\centering
-\caption{地形建模，綠色部分為使用三角網格(Triangular Mesh)建立的非規則地形。}
- \label{figure:dense-mapping}
+  \centering
+    \includegraphics[width=0.8\columnwidth]{images/jetson-car_2.jpg}	
+      \caption{核災應變機器人之硬體設計}
+    \label{figure:car2}
 \end{figure}
 
-\subsection{機器人定位與運動規劃}
+\subsection{機器人作業系統}
+在機器人上運行的系統，我們安裝Ubuntu18.04與ROS Melodic。ROS(Robot Operating System)是專為機器人軟體開發所設計出來的一套電腦作業系統架構。它是一個開源的元級作業系統，提供類似於作業系統的服務，包括硬體抽象描述、底層驅動程序管理、共用功能的執行、程序間消息傳遞、程序發行包管理，它也提供一些工具和庫用於獲取、建立、編寫和執行多機融合的程序。
+利用ROS我們能夠快速建立各種Node並利用Publisher與Subscriber互相傳送資訊。
 
-本研究主要利用光達(LiDAR)所得到的點雲來做為船隻分析障礙物的感測資料，在取得障礙物資訊的部分，首先，我們利用雜訊濾波器濾除掉雜訊，接著我們使用隨機抽樣一致法(RANSAC)濾除掉海平面所反射的點雲資料，只留下水上的障礙物點雲資料。
-在定位的部分，我們利用慣性測量單元(IMU)、全球定位系統(GPS)兩個感測器的資料，經由擴展卡曼濾波器(Extended Kalman Filter)，取得優化後的船隻3D姿態描述資訊: 位置、轉向、速度，並將這些資料藉由ROS的訊息及命令服務，讓我們可以將這些資訊在RViz上視覺化出來，方便我們即時的了解船隻的動態。接著我們利用~\cite{Zhuang2005real}這篇論文的最小角度路徑規劃法實現路徑規劃演算法，他所利用的原理就是先將起點及終點連成一條線，接著檢查此線上是否有障礙物，若有的話，則計算出向障礙物左側或右側走的角度較小，而走那一側，藉此躲避障礙物。
+\subsection{機器人定位與移動}
+我們用pypozyx的函式庫取得Tag Pose並且Publish至ROS topic，另一個Node將每個Pose記錄下來後，可在地圖上畫出一個行進軌跡，方便搜尋到物品之後進行後續的動作。
+機器人的移動是利用ROS的Joy Package搭配ROS Serial將car command傳送至Arduino驅動馬達，達到利用Joystick控制車子行進之功能。
 
-我們比較快速隨機擴展樹(Rapidly-exploring Random Trees, RRT)~\cite{ABry2011RRT}及RRT-connect~\cite{JJKuffner2000RRTConnect} 兩種路徑規劃方法，在路徑規劃時間計算部分，我們發現利用RRT所需要計算的時間遠遠高於最小角度規劃法，因為RRT需要不斷地產生隨機節點作為路徑判斷，而最小角度法只需要在有障礙物的地方產生最小角度的路徑節點就好。另外在路徑流暢性的部分，RRT會在快靠近障礙物時才會開始轉彎，雖然可以大幅縮短路徑，但這對於在海上有極大慣性的無人載具來說是一大風險，而最小角度法則是可以在一開始就朝向無障礙物的路徑前進，可以更安全的避免碰撞障礙物。
+\subsection{機器人視覺與物品定位}
+抽取D435之RGB影像後，首先使用MobileNet-SSD進行物品辨識，我們將搜索到的物品在畫面中標出Bounding Box之後，利用Depth資料以及CameraInfo將影像投影至三維空間，標出物品相對位置以後，利用TF函式乘上Pozyx的Pose資訊，
 
-最後在導航的部分，我們先利用橫麥卡托投影(UTM projection)，將GPS絕對經緯度座標，轉換成適合無人載具的X、Y平面座標，藉此就可以指定一處經緯度座標為目標，讓無人載具利用前面的方法，在避障的情況下，順利抵達相對應的X、Y目標點。
+\begin{figure}[h] % h means put this image here
+  \centering
+    \includegraphics[width=0.8\columnwidth]{images/tf.png}	
+      \caption{物品座標轉換}
+    \label{figure:tf}
+\end{figure}
