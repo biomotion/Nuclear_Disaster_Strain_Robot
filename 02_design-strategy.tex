@@ -10,7 +10,7 @@
 \end{figure}
 
 \subsection{Localization}
-我們採用Ultra-wideband作為取得定位資訊的裝置，使用pypozyx函式庫，利用UWB Anchor的訊號強度與TWR(Two Way Ranging)定位技術(圖\ref{figure:uwb_tech})同時利用三個以上的Anchor裝置就能定位出2D座標，同時利用四個以上能定位3D座標。同時UWB裝置上也搭載IMU感測器，能夠知道UWB裝置的方向。結合位置與方向這兩樣資訊我們能夠得出固定在車上的TAG三維姿態(Pose)。
+我們採用Ultra-wideband作為取得定位資訊的裝置，使用pypozyx函式庫，利用UWB Anchor的訊號強度與TWR(Two Way Ranging)定位技術(圖\ref{figure:uwb_tech})~\cite{7491981}同時利用三個以上的Anchor裝置就能定位出2D座標，同時利用四個以上能定位3D座標。同時UWB裝置上也搭載IMU感測器，能夠知道UWB裝置的方向。結合位置與方向這兩樣資訊我們能夠得出固定在車上的TAG三維姿態(Pose)。
 
 \begin{figure}[h]
   \centering
