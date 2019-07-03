@@ -65,25 +65,44 @@
 
 \subsection{影像辨識}
 
-...
+本專題比較目標物於各版本SSD運算量及FPS後，如\ref{table:fps_compare}，選擇FPS較高且運算量較低的MobileNet-V1 SSD，使用Jetson Nano執行Model。
+並配合深度相機於標記目標物後，將bounding box之中點位置利用矩陣投影的方式找出目標物與相機之距離，如\ref{figure:vision}。
 
-\begin{figure}[h] % h means put this image here
-\includegraphics[width=\columnwidth]{images/ground-vehicle.png}
-\centering
-\caption{地面無人載具實際場域驗證}
- \label{figure:ground-vehicle}
-\end{figure}
+由如\ref{figure:evaluation}可以發現到Duck的Average Precision會比其他的還要來的低只有0.58，明顯的看出MobileNet-SSD對於小物品的偵測相對於其他model如yolo較不理想。
 
-\subsection{水面無人載具與RobotX競賽（進行中）}
 
-本計畫已將所開發之演算法用於大型水面無人載具，Marine Advanced Research 所提供的自適應性波浪快艇 (Wave Adaptive Modular Vessel, WAM-V)，並透過設計此船隻的感測、計算、及動力完成競賽任務。本論文使用之自適應性波浪快艇系統架構圖如圖~\ref{figure:system_diagram}所示，其中主要分成三個部分: 硬體、電路、軟體，分別在模擬與實際竹湖場域測試。
+\begin{table}[h]
+	\centering
+	\begin{tabular}{| c| c| c|}
+		\hline
+		Frame Rate (FPS) & desktop 1080 & Jetson Nano \\ 
+		\hline
+		SSD & 36 & 1.5 \\ 
+		\hline
+		MobileNet-V1 SSD  & 90-100 & 16.5 \\ 
+		\hline 
+		MobileNet-V2 SSD & 78-80 & 12 \\ 
+ 
+		\hline 
+	\end{tabular}
+	\caption{各版本FPS比較}
+	\label{table:fps_compare}
+\end{table} 
 
-\begin{figure}[bht]
+\begin{figure}[t]
 	\centering
 	\includegraphics[height=!,width=\linewidth,keepaspectratio=true]
-	{images/hardware_setting.png}
-	\caption{本計畫將所開發的演算法移植到大型水上無人載具，將於2018年12月代表台灣第一次參與在夏威夷舉行的RobotX競賽。}
-	\label{figure:system_diagram}
+	{images/evaluation.png}
+	\caption{MobileNet-V1 SSD evaluation}
+	\label{figure:evaluation}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=!,width=\linewidth,keepaspectratio=true]
+	{images/vision.png}
+	\caption{預測目標物之實驗步驟及相對距離投影矩陣}
+	\label{figure:vision}
 \end{figure}
 
 
